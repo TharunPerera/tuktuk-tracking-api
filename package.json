@@ -1,0 +1,58 @@
+{
+  "name": "tuk-tuk-tracking-api",
+  "version": "1.0.0",
+  "description": "Real-Time Three-Wheeler Tracking & Movement Logging System for Sri Lanka Police",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "lint": "eslint src/**/*.js",
+    "test": "jest --forceExit --coverage",
+    "test:watch": "jest --watch",
+    "db:sync": "node scripts/syncDb.js",
+    "seed": "node scripts/seed.js",
+    "simulate": "node scripts/simulate.js"
+  },
+  "keywords": [
+    "tuk-tuk",
+    "tracking",
+    "api",
+    "police",
+    "sri-lanka"
+  ],
+  "author": "YOUR_STUDENT_ID",
+  "license": "ISC",
+  "dependencies": {
+    "@sentry/node": "^10.50.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.1",
+    "express-async-errors": "^3.1.1",
+    "express-rate-limit": "^8.4.1",
+    "helmet": "^8.1.0",
+    "joi": "^18.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "mysql2": "^3.22.3",
+    "sequelize": "^6.37.8",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^14.0.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "coverageDirectory": "coverage"
+  }
+}
