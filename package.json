@@ -7,12 +7,13 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "lint": "eslint src/**/*.js",
-    "test": "jest --forceExit --coverage",
+    "lint": "eslint src/**/*.js scripts/**/*.js",
+    "test": "jest --forceExit --coverage --runInBand",
     "test:watch": "jest --watch",
     "db:sync": "node scripts/syncDb.js",
     "seed": "node scripts/seed.js",
-    "simulate": "node scripts/simulate.js"
+    "simulate": "node scripts/simulate.js",
+    "export": "node scripts/exportData.js"
   },
   "keywords": [
     "tuk-tuk",
@@ -53,6 +54,17 @@
     "testMatch": [
       "**/tests/**/*.test.js"
     ],
-    "coverageDirectory": "coverage"
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/config/**",
+      "!src/server.js"
+    ],
+    "testTimeout": 30000
   }
 }
