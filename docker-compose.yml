@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  # MySQL database for local development
+  db:
+    image: mysql:8.0
+    container_name: tuktuk_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tuktuk_tracking
+      MYSQL_USER: tuktuk_user
+      MYSQL_PASSWORD: tuktuk_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist data between restarts
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # API service
+  api:
+    build: .
+    container_name: tuktuk_api
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DB_HOST: db # Note: 'db' is the service name above
+      DB_PORT: 3306
+      DB_NAME: tuktuk_tracking
+      DB_USER: tuktuk_user
+      DB_PASSWORD: tuktuk_pass
+      JWT_ACCESS_SECRET: dev_access_secret_change_in_prod
+      JWT_REFRESH_SECRET: dev_refresh_secret_change_in_prod
+      JWT_ACCESS_EXPIRES: 15m
+      JWT_REFRESH_EXPIRES: 7d
+    depends_on:
+      db:
+        condition: service_healthy # Wait for MySQL to be ready before starting API
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  mysql_data:
