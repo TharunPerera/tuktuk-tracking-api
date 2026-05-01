@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "name": "Colombo HQ",
+    "code": "COL-HQ",
+    "station_type": "HEADQUARTERS",
+    "address": "Chatham Street, Colombo 1",
+    "phone": "+94112421111",
+    "district_name": "Colombo",
+    "province_name": "Western Province"
+  },
+  {
+    "id": 2,
+    "name": "Wellawatte Police Station",
+    "code": "COL-WEL",
+    "station_type": "DISTRICT",
+    "address": "Wellawatte, Colombo 6",
+    "phone": "+94112364000",
+    "district_name": "Colombo",
+    "province_name": "Western Province"
+  },
+  {
+    "id": 3,
+    "name": "Maradana Police Station",
+    "code": "COL-MAR",
+    "station_type": "DISTRICT",
+    "address": "Maradana, Colombo 10",
+    "phone": "+94112695641",
+    "district_name": "Colombo",
+    "province_name": "Western Province"
+  },
+  {
+    "id": 4,
+    "name": "Gampaha Police Station",
+    "code": "GAM-01",
+    "station_type": "DISTRICT",
+    "address": "Gampaha Town",
+    "phone": "+94332222222",
+    "district_name": "Gampaha",
+    "province_name": "Western Province"
+  },
+  {
+    "id": 5,
+    "name": "Negombo Police Station",
+    "code": "GAM-NEG",
+    "station_type": "DISTRICT",
+    "address": "Negombo",
+    "phone": "+94312222333",
+    "district_name": "Gampaha",
+    "province_name": "Western Province"
+  },
+  {
+    "id": 6,
+    "name": "Kalutara Police Station",
+    "code": "KAL-01",
+    "station_type": "DISTRICT",
+    "address": "Kalutara Town",
+    "phone": "+94342222111",
+    "district_name": "Kalutara",
+    "province_name": "Western Province"
+  },
+  {
+    "id": 7,
+    "name": "Panadura Police Station",
+    "code": "KAL-PAN",
+    "station_type": "DISTRICT",
+    "address": "Panadura",
+    "phone": "+94382222555",
+    "district_name": "Kalutara",
+    "province_name": "Western Province"
+  },
+  {
+    "id": 8,
+    "name": "Kandy Police Station",
+    "code": "KAN-01",
+    "station_type": "PROVINCIAL",
+    "address": "Kandy Town",
+    "phone": "+94812222222",
+    "district_name": "Kandy",
+    "province_name": "Central Province"
+  },
+  {
+    "id": 9,
+    "name": "Peradeniya Police Station",
+    "code": "KAN-PER",
+    "station_type": "DISTRICT",
+    "address": "Peradeniya",
+    "phone": "+94812388000",
+    "district_name": "Kandy",
+    "province_name": "Central Province"
+  },
+  {
+    "id": 10,
+    "name": "Galle Police Station",
+    "code": "GAL-01",
+    "station_type": "PROVINCIAL",
+    "address": "Galle Fort",
+    "phone": "+94912222222",
+    "district_name": "Galle",
+    "province_name": "Southern Province"
+  },
+  {
+    "id": 11,
+    "name": "Unawatuna Police Station",
+    "code": "GAL-UNA",
+    "station_type": "DISTRICT",
+    "address": "Unawatuna",
+    "phone": "+94912234567",
+    "district_name": "Galle",
+    "province_name": "Southern Province"
+  },
+  {
+    "id": 12,
+    "name": "Jaffna Police Station",
+    "code": "JAF-01",
+    "station_type": "PROVINCIAL",
+    "address": "Jaffna Town",
+    "phone": "+94212222222",
+    "district_name": "Jaffna",
+    "province_name": "Northern Province"
+  },
+  {
+    "id": 13,
+    "name": "Trincomalee Police Station",
+    "code": "TRI-01",
+    "station_type": "DISTRICT",
+    "address": "Trincomalee Town",
+    "phone": "+94262222222",
+    "district_name": "Trincomalee",
+    "province_name": "Eastern Province"
+  },
+  {
+    "id": 14,
+    "name": "Kurunegala Police Station",
+    "code": "KUR-01",
+    "station_type": "PROVINCIAL",
+    "address": "Kurunegala Town",
+    "phone": "+94372222222",
+    "district_name": "Kurunegala",
+    "province_name": "North Western Province"
+  },
+  {
+    "id": 15,
+    "name": "Anuradhapura Police Station",
+    "code": "ANU-01",
+    "station_type": "PROVINCIAL",
+    "address": "Anuradhapura Town",
+    "phone": "+94252222222",
+    "district_name": "Anuradhapura",
+    "province_name": "North Central Province"
+  },
+  {
+    "id": 16,
+    "name": "Ratnapura Police Station",
+    "code": "RAT-01",
+    "station_type": "PROVINCIAL",
+    "address": "Ratnapura Town",
+    "phone": "+94452222222",
+    "district_name": "Ratnapura",
+    "province_name": "Sabaragamuwa Province"
+  },
+  {
+    "id": 17,
+    "name": "Matale Police Station",
+    "code": "MAT-01",
+    "station_type": "DISTRICT",
+    "address": "Matale Town",
+    "phone": "+94662222222",
+    "district_name": "Matale",
+    "province_name": "Central Province"
+  },
+  {
+    "id": 18,
+    "name": "Matara Police Station",
+    "code": "MTA-01",
+    "station_type": "DISTRICT",
+    "address": "Matara Town",
+    "phone": "+94412222222",
+    "district_name": "Matara",
+    "province_name": "Southern Province"
+  },
+  {
+    "id": 19,
+    "name": "Badulla Police Station",
+    "code": "BAD-01",
+    "station_type": "DISTRICT",
+    "address": "Badulla Town",
+    "phone": "+94552222222",
+    "district_name": "Badulla",
+    "province_name": "Uva Province"
+  },
+  {
+    "id": 20,
+    "name": "Batticaloa Police Station",
+    "code": "BAT-01",
+    "station_type": "DISTRICT",
+    "address": "Batticaloa Town",
+    "phone": "+94652222222",
+    "district_name": "Batticaloa",
+    "province_name": "Eastern Province"
+  },
+  {
+    "id": 21,
+    "name": "Polonnaruwa Police Station",
+    "code": "POL-01",
+    "station_type": "DISTRICT",
+    "address": "Polonnaruwa Town",
+    "phone": "+94272222222",
+    "district_name": "Polonnaruwa",
+    "province_name": "North Central Province"
+  }
+]

@@ -1,0 +1,22 @@
+id,name,code,station_type,address,phone,district_name,province_name
+1,Colombo HQ,COL-HQ,HEADQUARTERS,"Chatham Street, Colombo 1",+94112421111,Colombo,Western Province
+2,Wellawatte Police Station,COL-WEL,DISTRICT,"Wellawatte, Colombo 6",+94112364000,Colombo,Western Province
+3,Maradana Police Station,COL-MAR,DISTRICT,"Maradana, Colombo 10",+94112695641,Colombo,Western Province
+4,Gampaha Police Station,GAM-01,DISTRICT,Gampaha Town,+94332222222,Gampaha,Western Province
+5,Negombo Police Station,GAM-NEG,DISTRICT,Negombo,+94312222333,Gampaha,Western Province
+6,Kalutara Police Station,KAL-01,DISTRICT,Kalutara Town,+94342222111,Kalutara,Western Province
+7,Panadura Police Station,KAL-PAN,DISTRICT,Panadura,+94382222555,Kalutara,Western Province
+8,Kandy Police Station,KAN-01,PROVINCIAL,Kandy Town,+94812222222,Kandy,Central Province
+9,Peradeniya Police Station,KAN-PER,DISTRICT,Peradeniya,+94812388000,Kandy,Central Province
+10,Galle Police Station,GAL-01,PROVINCIAL,Galle Fort,+94912222222,Galle,Southern Province
+11,Unawatuna Police Station,GAL-UNA,DISTRICT,Unawatuna,+94912234567,Galle,Southern Province
+12,Jaffna Police Station,JAF-01,PROVINCIAL,Jaffna Town,+94212222222,Jaffna,Northern Province
+13,Trincomalee Police Station,TRI-01,DISTRICT,Trincomalee Town,+94262222222,Trincomalee,Eastern Province
+14,Kurunegala Police Station,KUR-01,PROVINCIAL,Kurunegala Town,+94372222222,Kurunegala,North Western Province
+15,Anuradhapura Police Station,ANU-01,PROVINCIAL,Anuradhapura Town,+94252222222,Anuradhapura,North Central Province
+16,Ratnapura Police Station,RAT-01,PROVINCIAL,Ratnapura Town,+94452222222,Ratnapura,Sabaragamuwa Province
+17,Matale Police Station,MAT-01,DISTRICT,Matale Town,+94662222222,Matale,Central Province
+18,Matara Police Station,MTA-01,DISTRICT,Matara Town,+94412222222,Matara,Southern Province
+19,Badulla Police Station,BAD-01,DISTRICT,Badulla Town,+94552222222,Badulla,Uva Province
+20,Batticaloa Police Station,BAT-01,DISTRICT,Batticaloa Town,+94652222222,Batticaloa,Eastern Province
+21,Polonnaruwa Police Station,POL-01,DISTRICT,Polonnaruwa Town,+94272222222,Polonnaruwa,North Central Province

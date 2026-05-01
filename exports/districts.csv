@@ -1,0 +1,26 @@
+id,name,code,province_name,province_code,latitude,longitude
+1,Colombo,COL,Western Province,WP,6.92710000,79.86120000
+2,Gampaha,GAM,Western Province,WP,7.09170000,79.99970000
+3,Kalutara,KAL,Western Province,WP,6.58540000,79.96070000
+4,Kandy,KAN,Central Province,CP,7.29060000,80.63370000
+5,Matale,MAT,Central Province,CP,7.46750000,80.62340000
+6,Nuwara Eliya,NUW,Central Province,CP,6.94970000,80.78910000
+7,Galle,GAL,Southern Province,SP,6.05350000,80.22100000
+8,Matara,MTA,Southern Province,SP,5.95490000,80.55500000
+9,Hambantota,HAM,Southern Province,SP,6.12410000,81.11850000
+10,Jaffna,JAF,Northern Province,NP,9.66150000,80.02550000
+11,Kilinochchi,KIL,Northern Province,NP,9.38030000,80.37700000
+12,Mannar,MAN,Northern Province,NP,8.98100000,79.90440000
+13,Mullaitivu,MUL,Northern Province,NP,9.26710000,80.81280000
+14,Vavuniya,VAV,Northern Province,NP,8.75140000,80.49710000
+15,Ampara,AMP,Eastern Province,EP,7.29920000,81.67240000
+16,Batticaloa,BAT,Eastern Province,EP,7.73100000,81.67470000
+17,Trincomalee,TRI,Eastern Province,EP,8.58740000,81.21520000
+18,Kurunegala,KUR,North Western Province,NWP,7.48180000,80.36090000
+19,Puttalam,PUT,North Western Province,NWP,8.03620000,79.82830000
+20,Anuradhapura,ANU,North Central Province,NCP,8.31140000,80.40370000
+21,Polonnaruwa,POL,North Central Province,NCP,7.94030000,81.01880000
+22,Badulla,BAD,Uva Province,UP,6.99340000,81.05500000
+23,Monaragala,MON,Uva Province,UP,6.87280000,81.35070000
+24,Ratnapura,RAT,Sabaragamuwa Province,SGP,6.70560000,80.38470000
+25,Kegalle,KEG,Sabaragamuwa Province,SGP,7.25130000,80.34640000

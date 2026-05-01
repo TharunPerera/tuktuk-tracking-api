@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "name": "Western Province",
+    "code": "WP",
+    "latitude": "6.92710000",
+    "longitude": "79.86120000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Central Province",
+    "code": "CP",
+    "latitude": "7.29060000",
+    "longitude": "80.63370000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Southern Province",
+    "code": "SP",
+    "latitude": "6.05350000",
+    "longitude": "80.22100000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Northern Province",
+    "code": "NP",
+    "latitude": "9.66150000",
+    "longitude": "80.02550000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Eastern Province",
+    "code": "EP",
+    "latitude": "7.87310000",
+    "longitude": "81.69230000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 6,
+    "name": "North Western Province",
+    "code": "NWP",
+    "latitude": "7.87310000",
+    "longitude": "80.27500000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 7,
+    "name": "North Central Province",
+    "code": "NCP",
+    "latitude": "8.31140000",
+    "longitude": "80.40370000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 8,
+    "name": "Uva Province",
+    "code": "UP",
+    "latitude": "6.99340000",
+    "longitude": "81.05500000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  },
+  {
+    "id": 9,
+    "name": "Sabaragamuwa Province",
+    "code": "SGP",
+    "latitude": "6.70560000",
+    "longitude": "80.38470000",
+    "createdAt": "2026-04-29T12:45:37.000Z",
+    "updatedAt": "2026-04-29T12:45:37.000Z"
+  }
+]

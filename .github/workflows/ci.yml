@@ -250,6 +250,7 @@ jobs:
   lint:
     name: ESLint Code Quality
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -269,7 +270,6 @@ jobs:
   build:
     name: Docker Build Verification
     runs-on: ubuntu-latest
-    # No dependency on test job anymore
 
     steps:
       - name: Checkout code

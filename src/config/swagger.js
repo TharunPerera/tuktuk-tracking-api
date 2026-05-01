@@ -40,6 +40,7 @@ Use **Bearer Token** authentication. Login at \`/api/v1/auth/login\` to get your
     //       process.env.NODE_ENV === "production" ? "Production" : "Development",
     //   },
     // ],
+
     servers: [
       {
         url: process.env.RAILWAY_PUBLIC_DOMAIN
