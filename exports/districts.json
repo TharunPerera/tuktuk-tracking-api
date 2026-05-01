@@ -1,0 +1,227 @@
+[
+  {
+    "id": 1,
+    "name": "Colombo",
+    "code": "COL",
+    "province_name": "Western Province",
+    "province_code": "WP",
+    "latitude": "6.92710000",
+    "longitude": "79.86120000"
+  },
+  {
+    "id": 2,
+    "name": "Gampaha",
+    "code": "GAM",
+    "province_name": "Western Province",
+    "province_code": "WP",
+    "latitude": "7.09170000",
+    "longitude": "79.99970000"
+  },
+  {
+    "id": 3,
+    "name": "Kalutara",
+    "code": "KAL",
+    "province_name": "Western Province",
+    "province_code": "WP",
+    "latitude": "6.58540000",
+    "longitude": "79.96070000"
+  },
+  {
+    "id": 4,
+    "name": "Kandy",
+    "code": "KAN",
+    "province_name": "Central Province",
+    "province_code": "CP",
+    "latitude": "7.29060000",
+    "longitude": "80.63370000"
+  },
+  {
+    "id": 5,
+    "name": "Matale",
+    "code": "MAT",
+    "province_name": "Central Province",
+    "province_code": "CP",
+    "latitude": "7.46750000",
+    "longitude": "80.62340000"
+  },
+  {
+    "id": 6,
+    "name": "Nuwara Eliya",
+    "code": "NUW",
+    "province_name": "Central Province",
+    "province_code": "CP",
+    "latitude": "6.94970000",
+    "longitude": "80.78910000"
+  },
+  {
+    "id": 7,
+    "name": "Galle",
+    "code": "GAL",
+    "province_name": "Southern Province",
+    "province_code": "SP",
+    "latitude": "6.05350000",
+    "longitude": "80.22100000"
+  },
+  {
+    "id": 8,
+    "name": "Matara",
+    "code": "MTA",
+    "province_name": "Southern Province",
+    "province_code": "SP",
+    "latitude": "5.95490000",
+    "longitude": "80.55500000"
+  },
+  {
+    "id": 9,
+    "name": "Hambantota",
+    "code": "HAM",
+    "province_name": "Southern Province",
+    "province_code": "SP",
+    "latitude": "6.12410000",
+    "longitude": "81.11850000"
+  },
+  {
+    "id": 10,
+    "name": "Jaffna",
+    "code": "JAF",
+    "province_name": "Northern Province",
+    "province_code": "NP",
+    "latitude": "9.66150000",
+    "longitude": "80.02550000"
+  },
+  {
+    "id": 11,
+    "name": "Kilinochchi",
+    "code": "KIL",
+    "province_name": "Northern Province",
+    "province_code": "NP",
+    "latitude": "9.38030000",
+    "longitude": "80.37700000"
+  },
+  {
+    "id": 12,
+    "name": "Mannar",
+    "code": "MAN",
+    "province_name": "Northern Province",
+    "province_code": "NP",
+    "latitude": "8.98100000",
+    "longitude": "79.90440000"
+  },
+  {
+    "id": 13,
+    "name": "Mullaitivu",
+    "code": "MUL",
+    "province_name": "Northern Province",
+    "province_code": "NP",
+    "latitude": "9.26710000",
+    "longitude": "80.81280000"
+  },
+  {
+    "id": 14,
+    "name": "Vavuniya",
+    "code": "VAV",
+    "province_name": "Northern Province",
+    "province_code": "NP",
+    "latitude": "8.75140000",
+    "longitude": "80.49710000"
+  },
+  {
+    "id": 15,
+    "name": "Ampara",
+    "code": "AMP",
+    "province_name": "Eastern Province",
+    "province_code": "EP",
+    "latitude": "7.29920000",
+    "longitude": "81.67240000"
+  },
+  {
+    "id": 16,
+    "name": "Batticaloa",
+    "code": "BAT",
+    "province_name": "Eastern Province",
+    "province_code": "EP",
+    "latitude": "7.73100000",
+    "longitude": "81.67470000"
+  },
+  {
+    "id": 17,
+    "name": "Trincomalee",
+    "code": "TRI",
+    "province_name": "Eastern Province",
+    "province_code": "EP",
+    "latitude": "8.58740000",
+    "longitude": "81.21520000"
+  },
+  {
+    "id": 18,
+    "name": "Kurunegala",
+    "code": "KUR",
+    "province_name": "North Western Province",
+    "province_code": "NWP",
+    "latitude": "7.48180000",
+    "longitude": "80.36090000"
+  },
+  {
+    "id": 19,
+    "name": "Puttalam",
+    "code": "PUT",
+    "province_name": "North Western Province",
+    "province_code": "NWP",
+    "latitude": "8.03620000",
+    "longitude": "79.82830000"
+  },
+  {
+    "id": 20,
+    "name": "Anuradhapura",
+    "code": "ANU",
+    "province_name": "North Central Province",
+    "province_code": "NCP",
+    "latitude": "8.31140000",
+    "longitude": "80.40370000"
+  },
+  {
+    "id": 21,
+    "name": "Polonnaruwa",
+    "code": "POL",
+    "province_name": "North Central Province",
+    "province_code": "NCP",
+    "latitude": "7.94030000",
+    "longitude": "81.01880000"
+  },
+  {
+    "id": 22,
+    "name": "Badulla",
+    "code": "BAD",
+    "province_name": "Uva Province",
+    "province_code": "UP",
+    "latitude": "6.99340000",
+    "longitude": "81.05500000"
+  },
+  {
+    "id": 23,
+    "name": "Monaragala",
+    "code": "MON",
+    "province_name": "Uva Province",
+    "province_code": "UP",
+    "latitude": "6.87280000",
+    "longitude": "81.35070000"
+  },
+  {
+    "id": 24,
+    "name": "Ratnapura",
+    "code": "RAT",
+    "province_name": "Sabaragamuwa Province",
+    "province_code": "SGP",
+    "latitude": "6.70560000",
+    "longitude": "80.38470000"
+  },
+  {
+    "id": 25,
+    "name": "Kegalle",
+    "code": "KEG",
+    "province_name": "Sabaragamuwa Province",
+    "province_code": "SGP",
+    "latitude": "7.25130000",
+    "longitude": "80.34640000"
+  }
+]

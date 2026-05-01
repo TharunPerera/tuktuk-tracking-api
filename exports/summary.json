@@ -1,0 +1,77 @@
+{
+  "exported_at": "2026-04-29T12:57:47.569Z",
+  "totals": {
+    "provinces": 9,
+    "districts": 25,
+    "police_stations": 21,
+    "drivers": 200,
+    "vehicles": 200,
+    "location_pings_total": 319401,
+    "location_pings_exported": 5000
+  },
+  "by_province": [
+    {
+      "province": "Western Province",
+      "code": "WP",
+      "total_vehicles": 23,
+      "active": "22"
+    },
+    {
+      "province": "Central Province",
+      "code": "CP",
+      "total_vehicles": 23,
+      "active": "23"
+    },
+    {
+      "province": "Southern Province",
+      "code": "SP",
+      "total_vehicles": 23,
+      "active": "23"
+    },
+    {
+      "province": "Northern Province",
+      "code": "NP",
+      "total_vehicles": 22,
+      "active": "22"
+    },
+    {
+      "province": "Eastern Province",
+      "code": "EP",
+      "total_vehicles": 22,
+      "active": "22"
+    },
+    {
+      "province": "North Western Province",
+      "code": "NWP",
+      "total_vehicles": 22,
+      "active": "22"
+    },
+    {
+      "province": "North Central Province",
+      "code": "NCP",
+      "total_vehicles": 22,
+      "active": "22"
+    },
+    {
+      "province": "Uva Province",
+      "code": "UP",
+      "total_vehicles": 22,
+      "active": "22"
+    },
+    {
+      "province": "Sabaragamuwa Province",
+      "code": "SGP",
+      "total_vehicles": 22,
+      "active": "22"
+    }
+  ],
+  "simulation_patterns": {
+    "ping_interval_minutes": 5,
+    "night_hours": "23:00 - 05:00 (vehicles parked, sparse pings)",
+    "morning_rush": "07:00 - 09:00 (speed: 30-50 km/h, full drift)",
+    "evening_rush": "17:00 - 19:00 (speed: 30-50 km/h, full drift)",
+    "midday": "11:00 - 14:00 (60% activity, moderate speed)",
+    "weekday_vs_weekend": "Weekends: 60% of weekday activity",
+    "speed_range_kmh": "0 (night parked) to 50 (rush hour peak)"
+  }
+}

@@ -30,12 +30,22 @@ Use **Bearer Token** authentication. Login at \`/api/v1/auth/login\` to get your
         name: "Student ID: YOUR_ID_HERE",
       },
     },
+    // servers: [
+    //   {
+    //     url:
+    //       process.env.NODE_ENV === "production"
+    //         ? "https://your-railway-domain.railway.app/api/v1"
+    //         : `http://localhost:${process.env.PORT || 3000}/api/v1`,
+    //     description:
+    //       process.env.NODE_ENV === "production" ? "Production" : "Development",
+    //   },
+    // ],
+
     servers: [
       {
-        url:
-          process.env.NODE_ENV === "production"
-            ? "https://your-railway-domain.railway.app/api/v1"
-            : `http://localhost:${process.env.PORT || 3000}/api/v1`,
+        url: process.env.RAILWAY_PUBLIC_DOMAIN
+          ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}/api/v1`
+          : `http://localhost:${process.env.PORT || 3000}/api/v1`,
         description:
           process.env.NODE_ENV === "production" ? "Production" : "Development",
       },
