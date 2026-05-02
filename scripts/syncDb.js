@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { sequelize } = require("../src/config/database");
-require("../src/models"); // Import all models (registers them with Sequelize)
+require("../src/models");
 const logger = require("../src/utils/logger");
 
 const syncDatabase = async () => {
@@ -8,9 +8,6 @@ const syncDatabase = async () => {
     await sequelize.authenticate();
     logger.info("Database connection established");
 
-    // force: false = don't drop existing tables
-    // alter: true = add new columns if models changed (safe for development)
-    // In production, use migrations instead of sync
     await sequelize.sync({ force: false, alter: true });
 
     logger.info("✅ All tables synchronized successfully");

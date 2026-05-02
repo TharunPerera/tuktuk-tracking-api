@@ -1,16 +1,3 @@
-// const express = require("express");
-// const router = express.Router();
-// const districtController = require("../controllers/district.controller");
-// const { authenticate, authorize } = require("../middleware/auth");
-// const { generalLimiter } = require("../middleware/rateLimiter");
-
-// router.use(generalLimiter, authenticate);
-// router.get("/", districtController.getAll);
-// router.get("/:id", districtController.getById);
-// router.post("/", authorize("SUPER_ADMIN"), districtController.create);
-
-// module.exports = router;
-
 const express = require("express");
 const router = express.Router();
 const districtController = require("../controllers/district.controller");
