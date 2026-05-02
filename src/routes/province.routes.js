@@ -1,29 +1,3 @@
-// const express = require("express");
-// const router = express.Router();
-// const provinceController = require("../controllers/province.controller");
-// const { authenticate, authorize } = require("../middleware/auth");
-// const { generalLimiter } = require("../middleware/rateLimiter");
-
-// router.use(generalLimiter);
-
-// // Public read access for geographic reference data
-// router.get("/", authenticate, provinceController.getAll);
-// router.get("/:id", authenticate, provinceController.getById);
-// router.post(
-//   "/",
-//   authenticate,
-//   authorize("SUPER_ADMIN"),
-//   provinceController.create,
-// );
-// router.put(
-//   "/:id",
-//   authenticate,
-//   authorize("SUPER_ADMIN"),
-//   provinceController.update,
-// );
-
-// module.exports = router;
-
 const express = require("express");
 const router = express.Router();
 const provinceController = require("../controllers/province.controller");
