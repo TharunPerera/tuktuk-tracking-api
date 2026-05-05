@@ -6,6 +6,7 @@ const { validate, validateQuery } = require("../middleware/validate");
 const {
   createVehicleSchema,
   updateVehicleSchema,
+  assignDriverSchema,
 } = require("../validations/vehicle.validation");
 const { vehicleFilterSchema } = require("../validations/location.validation");
 const { generalLimiter } = require("../middleware/rateLimiter");
@@ -29,36 +30,26 @@ const { generalLimiter } = require("../middleware/rateLimiter");
  *     parameters:
  *       - in: query
  *         name: province_id
- *         schema:
- *           type: integer
+ *         schema: { type: integer }
  *         description: Filter by province ID
  *       - in: query
  *         name: district_id
- *         schema:
- *           type: integer
+ *         schema: { type: integer }
  *         description: Filter by district ID
  *       - in: query
  *         name: status
- *         schema:
- *           type: string
- *           enum: [ACTIVE, INACTIVE, SUSPENDED]
+ *         schema: { type: string, enum: [ACTIVE, INACTIVE, SUSPENDED] }
  *         description: Filter by vehicle status
  *       - in: query
  *         name: search
- *         schema:
- *           type: string
+ *         schema: { type: string }
  *         description: Search by registration or chassis number
  *       - in: query
  *         name: page
- *         schema:
- *           type: integer
- *           default: 1
+ *         schema: { type: integer, default: 1 }
  *       - in: query
  *         name: limit
- *         schema:
- *           type: integer
- *           default: 20
- *           maximum: 100
+ *         schema: { type: integer, default: 20, maximum: 100 }
  *     responses:
  *       200:
  *         description: Vehicles retrieved with pagination
@@ -89,8 +80,7 @@ router.get(
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: integer
+ *         schema: { type: integer }
  *         description: Vehicle ID
  *     responses:
  *       200:
@@ -135,6 +125,9 @@ router.get(
  *               district_id:
  *                 type: integer
  *                 example: 1
+ *               jurisdiction_station_id:
+ *                 type: integer
+ *                 example: 1
  *               device_imei:
  *                 type: string
  *                 example: "123456789012345"
@@ -174,8 +167,7 @@ router.post(
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: integer
+ *         schema: { type: integer }
  *     requestBody:
  *       required: true
  *       content:
@@ -194,6 +186,8 @@ router.post(
  *                 type: string
  *               model:
  *                 type: string
+ *               jurisdiction_station_id:
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Vehicle updated
@@ -220,8 +214,7 @@ router.put(
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: integer
+ *         schema: { type: integer }
  *     responses:
  *       200:
  *         description: Vehicle deactivated
@@ -232,6 +225,85 @@ router.delete(
   "/:id",
   authorize("SUPER_ADMIN"),
   vehicleController.deleteVehicle,
+);
+
+/**
+ * @swagger
+ * /vehicles/{id}/assign-driver:
+ *   patch:
+ *     tags: [Vehicles]
+ *     summary: Assign or reassign a driver to a vehicle
+ *     description: Update only the driver assignment without needing to send the entire vehicle object.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [driver_id]
+ *             properties:
+ *               driver_id:
+ *                 type: integer
+ *                 description: ID of the driver to assign (null to unassign)
+ *                 example: 123
+ *     responses:
+ *       200:
+ *         description: Driver assigned successfully
+ *       404:
+ *         description: Vehicle or driver not found
+ *       409:
+ *         description: Driver already assigned to another active vehicle
+ */
+router.patch(
+  "/:id/assign-driver",
+  authorize("SUPER_ADMIN", "PROVINCIAL_ADMIN"),
+  validate(assignDriverSchema),
+  vehicleController.assignDriver,
+);
+
+/**
+ * @swagger
+ * /vehicles/{id}/assign-station:
+ *   patch:
+ *     tags: [Vehicles]
+ *     summary: Assign vehicle to a police station's jurisdiction
+ *     description: Assign this vehicle to a specific police station for jurisdiction management.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [station_id]
+ *             properties:
+ *               station_id:
+ *                 type: integer
+ *                 description: Police station ID (null to unassign)
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Station assigned successfully
+ *       404:
+ *         description: Vehicle or station not found
+ */
+router.patch(
+  "/:id/assign-station",
+  authorize("SUPER_ADMIN", "PROVINCIAL_ADMIN"),
+  vehicleController.assignStation,
 );
 
 module.exports = router;

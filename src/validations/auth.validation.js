@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const loginSchema = Joi.object({
   username: Joi.string()
-    .pattern(/^[a-zA-Z0-9_]+$/) // ✅ Allows letters, numbers, AND underscore
+    .pattern(/^[a-zA-Z0-9_]+$/)
     .min(3)
     .max(50)
     .required()
@@ -11,24 +11,27 @@ const loginSchema = Joi.object({
       "string.pattern.base":
         "Username must only contain letters, numbers, or underscores",
     }),
-  password: Joi.string()
-    .min(6)
-    .required()
-    .messages({ "any.required": "Password is required" }),
+  password: Joi.string().min(6).required().messages({
+    "any.required": "Password is required",
+  }),
+});
+
+// ISSUE #1 & #2 FIXED: Device login validation schema
+const deviceLoginSchema = Joi.object({
+  device_imei: Joi.string().min(15).max(17).required().messages({
+    "any.required": "Device IMEI is required",
+    "string.min": "IMEI must be at least 15 characters",
+  }),
 });
 
 const registerSchema = Joi.object({
   username: Joi.string()
-    .pattern(/^[a-zA-Z0-9_]+$/) // ✅ Allow underscores here too
+    .pattern(/^[a-zA-Z0-9_]+$/)
     .min(3)
     .max(50)
     .required(),
   email: Joi.string().email().required(),
-  password: Joi.string()
-    .min(8)
-    .max(100)
-    .required()
-    .messages({ "string.min": "Password must be at least 8 characters" }),
+  password: Joi.string().min(8).max(100).required(),
   full_name: Joi.string().min(2).max(150).required(),
   role: Joi.string()
     .valid("PROVINCIAL_ADMIN", "STATION_OFFICER", "DEVICE_CLIENT")
@@ -43,4 +46,9 @@ const refreshSchema = Joi.object({
   refreshToken: Joi.string().required(),
 });
 
-module.exports = { loginSchema, registerSchema, refreshSchema };
+module.exports = {
+  loginSchema,
+  deviceLoginSchema,
+  registerSchema,
+  refreshSchema,
+};

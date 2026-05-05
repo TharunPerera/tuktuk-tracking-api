@@ -70,7 +70,6 @@ const getDriverById = async (req, res, next) => {
 
     if (!driver) throw new AppError("Driver not found", 404);
 
-    // WSO2 Section 10.4 — Conditional GET with ETag
     const etag = `"driver-${driver.id}-${driver.updatedAt.getTime()}"`;
     if (req.headers["if-none-match"] === etag) {
       return res.status(304).end();
@@ -87,10 +86,7 @@ const getDriverById = async (req, res, next) => {
 const createDriver = async (req, res, next) => {
   try {
     const driver = await Driver.create(req.body);
-
-    // WSO2 Section 7.3: POST creation returns Location header
     const locationUri = `/api/${process.env.API_VERSION || "v1"}/drivers/${driver.id}`;
-
     return sendSuccess(
       res,
       201,
@@ -104,11 +100,49 @@ const createDriver = async (req, res, next) => {
   }
 };
 
+// ISSUE #5 FIXED: Prevent updating immutable fields (NIC, License)
 const updateDriver = async (req, res, next) => {
   try {
     const driver = await Driver.findByPk(req.params.id);
     if (!driver) throw new AppError("Driver not found", 404);
-    await driver.update(req.body);
+
+    // IMMUTABLE FIELDS - Cannot be changed after creation
+    const immutableFields = ["nic_number", "license_number"];
+    const attemptedImmutableUpdate = immutableFields.filter(
+      (field) => req.body[field] !== undefined,
+    );
+
+    if (attemptedImmutableUpdate.length > 0) {
+      throw new AppError(
+        `Cannot update immutable fields: ${attemptedImmutableUpdate.join(", ")}. These are legal identifiers and cannot be changed.`,
+        400,
+      );
+    }
+
+    // Only allow updating mutable fields
+    const allowedUpdates = {};
+    const mutableFields = [
+      "full_name",
+      "phone",
+      "address",
+      "date_of_birth",
+      "is_active",
+    ];
+
+    mutableFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        allowedUpdates[field] = req.body[field];
+      }
+    });
+
+    if (Object.keys(allowedUpdates).length === 0) {
+      throw new AppError(
+        "No valid fields to update. Allowed fields: full_name, phone, address, date_of_birth, is_active",
+        400,
+      );
+    }
+
+    await driver.update(allowedUpdates);
     return sendSuccess(res, 200, "Driver updated", driver);
   } catch (error) {
     next(error);
@@ -120,7 +154,6 @@ const deactivateDriver = async (req, res, next) => {
     const driver = await Driver.findByPk(req.params.id);
     if (!driver) throw new AppError("Driver not found", 404);
 
-    // Block deactivation if driver has an active vehicle
     const activeVehicle = await Vehicle.findOne({
       where: { driver_id: driver.id, status: "ACTIVE" },
     });

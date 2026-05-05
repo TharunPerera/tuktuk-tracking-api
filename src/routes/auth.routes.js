@@ -7,6 +7,7 @@ const {
   loginSchema,
   registerSchema,
   refreshSchema,
+  deviceLoginSchema,
 } = require("../validations/auth.validation");
 const { authLimiter } = require("../middleware/rateLimiter");
 const { User } = require("../models");
@@ -74,6 +75,55 @@ router.post("/login", authLimiter, validate(loginSchema), authController.login);
 
 /**
  * @swagger
+ * /auth/device-login:
+ *   post:
+ *     tags: [Authentication]
+ *     summary: GPS Device Login - Authenticate by IMEI
+ *     description: GPS trackers authenticate using their IMEI number instead of username/password.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [device_imei]
+ *             properties:
+ *               device_imei:
+ *                 type: string
+ *                 example: "35168235747426217"
+ *     responses:
+ *       200:
+ *         description: Device authenticated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                     refreshToken:
+ *                       type: string
+ *                     device:
+ *                       type: object
+ *       401:
+ *         description: Invalid IMEI or device inactive
+ */
+router.post(
+  "/device-login",
+  authLimiter,
+  validate(deviceLoginSchema),
+  authController.deviceLogin,
+);
+
+/**
+ * @swagger
  * /auth/refresh:
  *   post:
  *     tags: [Authentication]
@@ -93,6 +143,18 @@ router.post("/login", authLimiter, validate(loginSchema), authController.login);
  *     responses:
  *       200:
  *         description: New access token returned
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
  *       401:
  *         description: Invalid or expired refresh token
  */
@@ -104,6 +166,7 @@ router.post("/refresh", validate(refreshSchema), authController.refresh);
  *   post:
  *     tags: [Authentication]
  *     summary: Logout and revoke refresh token
+ *     description: Revokes the refresh token so it cannot be used again.
  *     requestBody:
  *       required: true
  *       content:
@@ -113,9 +176,19 @@ router.post("/refresh", validate(refreshSchema), authController.refresh);
  *             properties:
  *               refreshToken:
  *                 type: string
+ *                 example: "your-refresh-token-here"
  *     responses:
  *       200:
  *         description: Logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
  */
 router.post("/logout", authController.logout);
 
@@ -125,13 +198,40 @@ router.post("/logout", authController.logout);
  *   get:
  *     tags: [Authentication]
  *     summary: Get current user profile
+ *     description: Returns the authenticated user's profile with role and geographic scope.
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Profile data returned
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     username:
+ *                       type: string
+ *                     full_name:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     province:
+ *                       type: object
+ *                     district:
+ *                       type: object
+ *                     station:
+ *                       type: object
  *       401:
- *         description: No token provided
+ *         description: No token provided or invalid token
  */
 router.get("/profile", authenticate, authController.getProfile);
 
@@ -182,6 +282,22 @@ router.get("/profile", authenticate, authController.getProfile);
  *     responses:
  *       201:
  *         description: User registered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     username:
+ *                       type: string
+ *                     role:
+ *                       type: string
  *       403:
  *         description: Access denied — not SUPER_ADMIN
  *       409:

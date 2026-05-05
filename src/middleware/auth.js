@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { AppError } = require("./errorHandler");
 const logger = require("../utils/logger");
+const { Vehicle } = require("../models");
 
 // Verify JWT token from Authorization header
-// Expected header: Authorization: Bearer <token>
 const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -16,22 +16,56 @@ const authenticate = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    // Verify signature and expiry using our secret
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-
-    // Attach user info to request — available in all subsequent middleware/controllers
     req.user = decoded;
-
     logger.debug(`Authenticated user: ${decoded.username} (${decoded.role})`);
     next();
   } catch (error) {
-    next(error); // Passes to errorHandler which handles JWT errors
+    next(error);
+  }
+};
+
+// SPECIAL: Authenticate GPS device by IMEI (no JWT required)
+// This is the secure device authentication method for Issue #1
+const authenticateDevice = async (req, res, next) => {
+  const deviceImei = req.body.device_imei || req.headers["x-device-imei"];
+
+  if (!deviceImei) {
+    return next(new AppError("Device IMEI required for authentication", 401));
+  }
+
+  try {
+    // Find vehicle by IMEI - this is the device's "identity"
+    const vehicle = await Vehicle.findOne({
+      where: { device_imei: deviceImei, status: "ACTIVE" },
+    });
+
+    if (!vehicle) {
+      logger.warn(
+        `Device authentication failed: IMEI ${deviceImei} not registered`,
+      );
+      return next(new AppError("Invalid device credentials", 401));
+    }
+
+    // Attach vehicle info to request
+    req.device = {
+      vehicle_id: vehicle.id,
+      registration_number: vehicle.registration_number,
+      device_imei: deviceImei,
+      province_id: vehicle.province_id,
+      district_id: vehicle.district_id,
+    };
+
+    logger.debug(
+      `Device authenticated: ${vehicle.registration_number} (IMEI: ${deviceImei})`,
+    );
+    next();
+  } catch (error) {
+    next(error);
   }
 };
 
 // Role-based authorization
-// Usage: authorize('SUPER_ADMIN', 'PROVINCIAL_ADMIN')
-// This returns a middleware function that checks if the authenticated user has one of the allowed roles
 const authorize = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
@@ -55,32 +89,26 @@ const authorize = (...allowedRoles) => {
 };
 
 // Geographic scope enforcement
-// A PROVINCIAL_ADMIN can only see data for their own province
-// This middleware adds scope filters that controllers must respect
 const enforceScope = (req, res, next) => {
   const { role, province_id, district_id, station_id } = req.user;
 
-  // SUPER_ADMIN has no restrictions — can see everything
   if (role === "SUPER_ADMIN") {
-    req.scope = {}; // Empty scope = no filter
+    req.scope = {};
     return next();
   }
 
-  // PROVINCIAL_ADMIN is restricted to their province
   if (role === "PROVINCIAL_ADMIN") {
     req.scope = { province_id };
     return next();
   }
 
-  // STATION_OFFICER is restricted to their district
   if (role === "STATION_OFFICER") {
     req.scope = { district_id, station_id };
     return next();
   }
 
-  // DEVICE_CLIENT has its own scope — handled separately in location routes
   req.scope = {};
   next();
 };
 
-module.exports = { authenticate, authorize, enforceScope };
+module.exports = { authenticate, authenticateDevice, authorize, enforceScope };

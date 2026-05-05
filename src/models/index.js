@@ -7,15 +7,11 @@ const Vehicle = require("./Vehicle");
 const LocationPing = require("./LocationPing");
 const RefreshToken = require("./RefreshToken");
 
-// ==========================================
-// DEFINE ASSOCIATIONS (Table Relationships)
-// ==========================================
-
-// Province <-> District: One province has many districts
+// Province <-> District
 Province.hasMany(District, { foreignKey: "province_id", as: "districts" });
 District.belongsTo(Province, { foreignKey: "province_id", as: "province" });
 
-// District <-> PoliceStation: One district has many stations
+// District <-> PoliceStation
 District.hasMany(PoliceStation, { foreignKey: "district_id", as: "stations" });
 PoliceStation.belongsTo(District, {
   foreignKey: "district_id",
@@ -27,22 +23,31 @@ User.belongsTo(Province, { foreignKey: "province_id", as: "province" });
 User.belongsTo(District, { foreignKey: "district_id", as: "district" });
 User.belongsTo(PoliceStation, { foreignKey: "station_id", as: "station" });
 
-// Driver <-> Vehicle: One driver can have one vehicle (for simplicity)
+// Driver <-> Vehicle
 Driver.hasOne(Vehicle, { foreignKey: "driver_id", as: "vehicle" });
 Vehicle.belongsTo(Driver, { foreignKey: "driver_id", as: "driver" });
 
 // Vehicle geographic associations
 Vehicle.belongsTo(Province, { foreignKey: "province_id", as: "province" });
 Vehicle.belongsTo(District, { foreignKey: "district_id", as: "district" });
+// ISSUE #3 FIXED: Vehicle to PoliceStation association for jurisdiction
+Vehicle.belongsTo(PoliceStation, {
+  foreignKey: "jurisdiction_station_id",
+  as: "jurisdiction_station",
+});
+PoliceStation.hasMany(Vehicle, {
+  foreignKey: "jurisdiction_station_id",
+  as: "jurisdiction_vehicles",
+});
 
-// Vehicle <-> LocationPing: One vehicle has many location pings (the core data flow)
+// Vehicle <-> LocationPing
 Vehicle.hasMany(LocationPing, {
   foreignKey: "vehicle_id",
   as: "locationPings",
 });
 LocationPing.belongsTo(Vehicle, { foreignKey: "vehicle_id", as: "vehicle" });
 
-// LocationPing geographic (denormalized for fast queries)
+// LocationPing geographic
 LocationPing.belongsTo(Province, { foreignKey: "province_id", as: "province" });
 LocationPing.belongsTo(District, { foreignKey: "district_id", as: "district" });
 

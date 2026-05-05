@@ -18,12 +18,12 @@ A RESTful API for tracking registered tuk-tuks across Sri Lanka using GPS pings.
 
 Use these credentials to test different role permissions:
 
-| Role | Username | Password | Access Level |
-|------|----------|----------|--------------|
+| Role | Username/IMEI | Password | Access Level |
+|------|---------------|----------|--------------|
 | 👑 **SUPER_ADMIN** | \`hq_admin\` | \`Admin@1234\` | Full system access - all provinces, districts, and vehicles |
 | 🏛️ **PROVINCIAL_ADMIN** | \`wp_admin\` | \`WPAdmin@1234\` | Province-scoped access - Western Province only |
 | 👮 **STATION_OFFICER** | \`col_officer\` | \`Officer@1234\` | District-scoped access - Colombo district only |
-| 📡 **DEVICE_CLIENT** | \`device_352148078300001\` | \`Device@352148078300001\` | GPS device - can only submit location pings |
+| 📡 **DEVICE_CLIENT** | Use \`/auth/device-login\` with IMEI: \`35168235747426217\` | No password required | GPS device - can only submit location pings |
 
 ---
 
@@ -31,23 +31,34 @@ Use these credentials to test different role permissions:
 
 | Endpoint | SUPER_ADMIN | PROVINCIAL_ADMIN | STATION_OFFICER | DEVICE_CLIENT |
 |----------|-------------|------------------|-----------------|---------------|
-| POST /auth/login | ✅ | ✅ | ✅ | ✅ |
+| POST /auth/login | ✅ | ✅ | ✅ | ❌ |
+| POST /auth/device-login | ❌ | ❌ | ❌ | ✅ |
 | GET /auth/profile | ✅ | ✅ | ✅ | ✅ |
+| POST /auth/refresh | ✅ | ✅ | ✅ | ✅ |
+| POST /auth/logout | ✅ | ✅ | ✅ | ✅ |
 | POST /locations/ping | ✅ | ❌ | ❌ | ✅ |
 | GET /locations/live | ✅ | ✅ (scoped) | ✅ (scoped) | ❌ |
+| GET /locations/:id/live | ✅ | ✅ (scoped) | ✅ (scoped) | ❌ |
 | GET /locations/:id/history | ✅ | ✅ (scoped) | ✅ (scoped) | ❌ |
+| GET /locations/:id/summary | ✅ | ✅ (scoped) | ✅ (scoped) | ❌ |
 | GET /vehicles | ✅ | ✅ (scoped) | ✅ (scoped) | ❌ |
 | POST /vehicles | ✅ | ❌ | ❌ | ❌ |
 | PUT /vehicles/:id | ✅ | ✅ (scoped) | ❌ | ❌ |
 | DELETE /vehicles/:id | ✅ | ❌ | ❌ | ❌ |
+| PATCH /vehicles/:id/assign-driver | ✅ | ✅ | ❌ | ❌ |
+| PATCH /vehicles/:id/assign-station | ✅ | ✅ | ❌ | ❌ |
+| GET /drivers | ✅ | ✅ | ✅ | ❌ |
+| POST /drivers | ✅ | ❌ | ❌ | ❌ |
+| PUT /drivers/:id | ✅ | ✅ | ❌ | ❌ |
+| DELETE /drivers/:id | ✅ | ❌ | ❌ | ❌ |
 | GET /provinces | ✅ | ✅ | ✅ | ❌ |
 | POST /provinces | ✅ | ❌ | ❌ | ❌ |
 | GET /districts | ✅ | ✅ | ✅ | ❌ |
 | POST /districts | ✅ | ❌ | ❌ | ❌ |
 | GET /stations | ✅ | ✅ | ✅ | ❌ |
 | POST /stations | ✅ | ❌ | ❌ | ❌ |
-| GET /drivers | ✅ | ✅ | ✅ | ❌ |
-| POST /drivers | ✅ | ❌ | ❌ | ❌ |
+| GET /stations/:id/vehicles | ✅ | ✅ | ✅ | ❌ |
+| POST /stations/:id/vehicles/assign/:vehicleId | ✅ | ✅ | ❌ | ❌ |
 | GET /users | ✅ | ❌ | ❌ | ❌ |
 | GET /stats | ✅ | ✅ | ❌ | ❌ |
 
@@ -65,10 +76,15 @@ Use these credentials to test different role permissions:
 
 ## 🔑 Authentication
 
-1. Call \`POST /api/v1/auth/login\` with credentials
+### For Police Officers:
+1. Call \`POST /api/v1/auth/login\` with username and password
 2. Copy the \`accessToken\` from response
 3. Click **Authorize** button above and enter: \`Bearer YOUR_TOKEN\`
-4. All subsequent requests will include the token
+
+### For GPS Devices (ISSUE #1 & #2 FIXED):
+1. Call \`POST /api/v1/auth/device-login\` with IMEI only
+2. Copy the \`accessToken\` from response
+3. Use token for \`POST /api/v1/locations/ping\`
 
 ---
 
@@ -90,7 +106,7 @@ The **Filter by Tag** feature (search box above) allows you to:
 ## 🚀 Quick Start Guide
 
 ### For VIVA Presentation:
-1. **Filter by "Authentication"** → Login with SUPER_ADMIN credentials
+1. **Filter by "Authentication"** → Login with SUPER_ADMIN credentials or device IMEI
 2. **Filter by "Vehicles"** → Show all 200 registered tuk-tuks
 3. **Filter by "Location"** → Get live positions and movement history
 4. **Filter by "Statistics"** → Show system-wide analytics
@@ -124,7 +140,7 @@ The **Filter by Tag** feature (search box above) allows you to:
           scheme: "bearer",
           bearerFormat: "JWT",
           description:
-            "Enter: Bearer {your-jwt-token} (Get token from POST /auth/login)",
+            "Enter: Bearer {your-jwt-token} (Get token from POST /auth/login or POST /auth/device-login)",
         },
       },
       parameters: {
@@ -202,11 +218,10 @@ const setupSwagger = (app) => {
       customCss: ".swagger-ui .topbar { display: none }",
       customSiteTitle: "Tuk-Tuk Tracking API Docs | Sri Lanka Police",
       swaggerOptions: {
-        persistAuthorization: true, // Keeps token after page refresh
-        displayRequestDuration: true, // Shows request duration
-        filter: true, // Enables endpoint filtering by tag
-        tryItOutEnabled: true, // Auto-enables try it out
-        // Show tag filtering explanation in console
+        persistAuthorization: true,
+        displayRequestDuration: true,
+        filter: true,
+        tryItOutEnabled: true,
         onComplete: () => {
           console.log(`
 📚 Swagger UI Loaded!

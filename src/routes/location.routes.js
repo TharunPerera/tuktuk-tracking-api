@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const locationController = require("../controllers/location.controller");
-const { authenticate, authorize, enforceScope } = require("../middleware/auth");
+const {
+  authenticate,
+  authorize,
+  enforceScope,
+  authenticateDevice,
+} = require("../middleware/auth");
 const { validate, validateQuery } = require("../middleware/validate");
 const {
   locationPingSchema,
@@ -22,7 +27,7 @@ const { deviceLimiter, generalLimiter } = require("../middleware/rateLimiter");
  *   post:
  *     tags: [Location]
  *     summary: Submit GPS location ping (DEVICE_CLIENT or SUPER_ADMIN)
- *     description: GPS tracker devices call this every 30 seconds to report their location. Rate limited to 200 requests per 15 minutes.
+ *     description: GPS tracker devices call this every 30 seconds. Uses IMEI-based authentication.
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -36,7 +41,7 @@ const { deviceLimiter, generalLimiter } = require("../middleware/rateLimiter");
  *               device_imei:
  *                 type: string
  *                 description: 15-digit IMEI of the GPS device
- *                 example: "352148078300001"
+ *                 example: "35168235747426217"
  *               latitude:
  *                 type: number
  *                 description: GPS latitude (Sri Lanka range 5.5 to 10.5)
@@ -61,27 +66,10 @@ const { deviceLimiter, generalLimiter } = require("../middleware/rateLimiter");
  *                 type: string
  *                 format: date-time
  *                 description: Device timestamp (ISO 8601)
- *                 example: "2026-04-28T10:30:00.000Z"
+ *                 example: "2026-05-04T10:30:00.000Z"
  *     responses:
  *       201:
  *         description: Ping recorded successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: object
- *                   properties:
- *                     ping_id:
- *                       type: integer
- *                     vehicle_id:
- *                       type: integer
- *                     timestamp:
- *                       type: string
  *       401:
  *         description: Authentication required
  *       403:
@@ -96,8 +84,7 @@ const { deviceLimiter, generalLimiter } = require("../middleware/rateLimiter");
 router.post(
   "/ping",
   deviceLimiter,
-  authenticate,
-  authorize("DEVICE_CLIENT", "SUPER_ADMIN"),
+  authenticateDevice,
   validate(locationPingSchema),
   locationController.postPing,
 );
@@ -116,37 +103,17 @@ router.post(
  *         name: province_id
  *         schema:
  *           type: integer
- *         description: Filter by province (SUPER_ADMIN only — others are auto-scoped)
+ *         description: Filter by province (SUPER_ADMIN only)
+ *         example: 1
  *       - in: query
  *         name: district_id
  *         schema:
  *           type: integer
  *         description: Filter by district
+ *         example: 1
  *     responses:
  *       200:
  *         description: Array of latest GPS pings for all vehicles
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       vehicle_id:
- *                         type: integer
- *                       latitude:
- *                         type: number
- *                       longitude:
- *                         type: number
- *                       speed:
- *                         type: number
- *                       timestamp:
- *                         type: string
  *       401:
  *         description: Authentication required
  */
@@ -195,7 +162,7 @@ router.get(
  *   get:
  *     tags: [Location]
  *     summary: Get movement history for a vehicle in a time window
- *     description: Returns all GPS pings for a vehicle between the given timestamps, in chronological order. Use this to reconstruct the vehicle's route.
+ *     description: Returns all GPS pings for a vehicle between the given timestamps, in chronological order.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -204,6 +171,7 @@ router.get(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: Vehicle ID
  *         example: 1
  *       - in: query
  *         name: from
@@ -211,26 +179,28 @@ router.get(
  *         schema:
  *           type: string
  *           format: date-time
- *         description: Start of time window (ISO 8601)
- *         example: "2026-04-21T00:00:00Z"
+ *         description: Start of time window (ISO 8601) - REQUIRED
+ *         example: "2026-05-04T14:00:00Z"
  *       - in: query
  *         name: to
  *         schema:
  *           type: string
  *           format: date-time
  *         description: End of time window (ISO 8601). Defaults to now.
- *         example: "2026-04-21T23:59:59Z"
+ *         example: "2026-05-04T16:00:00Z"
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
  *           default: 1
+ *         example: 1
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 100
  *           maximum: 1000
+ *         example: 100
  *     responses:
  *       200:
  *         description: Paginated location history
@@ -244,6 +214,86 @@ router.get(
   authorize("SUPER_ADMIN", "PROVINCIAL_ADMIN", "STATION_OFFICER"),
   validateQuery(historyQuerySchema),
   locationController.getHistory,
+);
+
+/**
+ * @swagger
+ * /locations/{vehicleId}/summary:
+ *   get:
+ *     tags: [Location]
+ *     summary: Get movement summary for a vehicle
+ *     description: Returns analytics including distance traveled, average speed, districts visited, stationary periods.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: vehicleId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Vehicle ID
+ *         example: 1
+ *       - in: query
+ *         name: from
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Start of time window (ISO 8601)
+ *         example: "2026-05-04T14:00:00Z"
+ *       - in: query
+ *         name: to
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: End of time window (ISO 8601). Defaults to now.
+ *         example: "2026-05-04T16:00:00Z"
+ *     responses:
+ *       200:
+ *         description: Movement summary calculated with analytics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     vehicle:
+ *                       type: object
+ *                     time_window:
+ *                       type: object
+ *                     summary:
+ *                       type: object
+ *                       properties:
+ *                         total_distance_km:
+ *                           type: number
+ *                         average_speed_kmh:
+ *                           type: number
+ *                         max_speed_kmh:
+ *                           type: number
+ *                         active_minutes:
+ *                           type: number
+ *                         stationary_minutes:
+ *                           type: number
+ *                         districts_visited:
+ *                           type: array
+ *                     movement_log:
+ *                       type: array
+ *       404:
+ *         description: Vehicle not found
+ *       422:
+ *         description: Missing required "from" parameter
+ */
+router.get(
+  "/:vehicleId/summary",
+  generalLimiter,
+  authenticate,
+  authorize("SUPER_ADMIN", "PROVINCIAL_ADMIN", "STATION_OFFICER"),
+  validateQuery(historyQuerySchema),
+  locationController.getMovementSummary,
 );
 
 module.exports = router;

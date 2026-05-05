@@ -1,4 +1,4 @@
-const { Sentry } = require("../config/sentry");
+const Sentry = require("@sentry/node");
 const logger = require("../utils/logger");
 const { sendError } = require("../utils/response");
 

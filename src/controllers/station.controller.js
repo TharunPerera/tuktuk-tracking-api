@@ -1,6 +1,13 @@
-const { PoliceStation, District, Province } = require("../models");
+const {
+  PoliceStation,
+  District,
+  Province,
+  Vehicle,
+  Driver,
+} = require("../models");
 const { AppError } = require("../middleware/errorHandler");
-const { sendSuccess } = require("../utils/response");
+const { sendSuccess, buildPaginationMeta } = require("../utils/response");
+const { Op } = require("sequelize");
 
 const getAll = async (req, res, next) => {
   try {
@@ -74,4 +81,83 @@ const update = async (req, res, next) => {
   }
 };
 
-module.exports = { getAll, getById, create, update };
+// ISSUE #6 FIXED: Get vehicles under a station's jurisdiction
+const getStationVehicles = async (req, res, next) => {
+  try {
+    const stationId = req.params.id;
+    const { status, page = 1, limit = 20 } = req.query;
+
+    const station = await PoliceStation.findByPk(stationId);
+    if (!station) throw new AppError("Police station not found", 404);
+
+    const where = { jurisdiction_station_id: stationId };
+    if (status) where.status = status;
+
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+
+    const { count, rows } = await Vehicle.findAndCountAll({
+      where,
+      include: [
+        {
+          model: Driver,
+          as: "driver",
+          attributes: ["id", "full_name", "nic_number", "phone"],
+        },
+        { model: Province, as: "province", attributes: ["id", "name", "code"] },
+        { model: District, as: "district", attributes: ["id", "name", "code"] },
+      ],
+      limit: parseInt(limit),
+      offset,
+      order: [["registration_number", "ASC"]],
+    });
+
+    return sendSuccess(
+      res,
+      200,
+      `Vehicles under ${station.name}`,
+      rows,
+      buildPaginationMeta(page, limit, count),
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ISSUE #3 FIXED: Assign vehicle to a station's jurisdiction
+const assignVehicleToStation = async (req, res, next) => {
+  try {
+    const stationId = req.params.id;
+    const vehicleId = req.params.vehicleId;
+
+    const station = await PoliceStation.findByPk(stationId);
+    if (!station) throw new AppError("Police station not found", 404);
+
+    const vehicle = await Vehicle.findByPk(vehicleId);
+    if (!vehicle) throw new AppError("Vehicle not found", 404);
+
+    await vehicle.update({ jurisdiction_station_id: stationId });
+
+    return sendSuccess(
+      res,
+      200,
+      `Vehicle ${vehicle.registration_number} assigned to ${station.name}`,
+      {
+        vehicle_id: vehicle.id,
+        registration_number: vehicle.registration_number,
+        station_id: station.id,
+        station_name: station.name,
+      },
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  getAll,
+  getById,
+  create,
+  update,
+  getStationVehicles,
+  assignVehicleToStation,
+};

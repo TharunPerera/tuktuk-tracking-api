@@ -4,7 +4,12 @@ const { buildPaginationMeta } = require("../utils/response");
 
 const postPing = async (req, res, next) => {
   try {
-    const ping = await locationService.postPing(req.body);
+    // req.device comes from authenticateDevice middleware
+    const pingData = {
+      ...req.body,
+      vehicle_id: req.device.vehicle_id,
+    };
+    const ping = await locationService.postPing(pingData);
     return sendSuccess(res, 201, "Location ping recorded", {
       ping_id: ping.id,
       vehicle_id: ping.vehicle_id,
@@ -59,4 +64,28 @@ const getLiveView = async (req, res, next) => {
   }
 };
 
-module.exports = { postPing, getLatestLocation, getHistory, getLiveView };
+// ISSUE #8 FIXED: Movement summary endpoint for investigations
+const getMovementSummary = async (req, res, next) => {
+  try {
+    const { vehicleId } = req.params;
+    const { from, to } = req.query;
+
+    const summary = await locationService.getMovementSummary(
+      vehicleId,
+      from,
+      to,
+    );
+
+    return sendSuccess(res, 200, "Movement summary generated", summary);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  postPing,
+  getLatestLocation,
+  getHistory,
+  getLiveView,
+  getMovementSummary,
+};
